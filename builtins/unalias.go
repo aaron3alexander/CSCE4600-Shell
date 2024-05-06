@@ -2,9 +2,10 @@ package builtins
 
 import (
 	"fmt"
+	"io"
 )
 
-func UnAlias(args ...string) error {
+func UnAlias(w io.Writer, args ...string) error {
 	if len(args) == 0 {
 		return fmt.Errorf("missing alias name")
 	}
@@ -14,9 +15,9 @@ func UnAlias(args ...string) error {
 
 		if ok {
 			delete(aliases, alias)
-			fmt.Printf("Removed alias: %s \n", alias)
+			fmt.Fprintf(w, "Removed alias: %s \n", alias)
 		} else {
-			fmt.Printf("Alias '%s' not found\n", alias)
+			fmt.Fprintf(w, "Alias '%s' not found\n", alias)
 
 		}
 	}

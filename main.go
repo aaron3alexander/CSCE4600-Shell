@@ -91,13 +91,13 @@ func handleInput(w io.Writer, input string, exit chan<- struct{}) error {
 	case "pwd":
 		return builtins.PrintWorkingDirectory()
 	case "echo":
-		return builtins.Echo(args...)
+		return builtins.Echo(w, args...)
 	case "alias":
 		return builtins.Alias(args...)
 	case "unalias":
-		return builtins.UnAlias(args...)
+		return builtins.UnAlias(w, args...)
 	case "history":
-		return builtins.History(args...)
+		return builtins.History(w, args...)
 	case "exit":
 		exit <- struct{}{}
 		return nil
