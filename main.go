@@ -71,6 +71,16 @@ func handleInput(w io.Writer, input string, exit chan<- struct{}) error {
 	args := strings.Split(input, " ")
 	name, args := args[0], args[1:]
 
+	for alias, command := range builtins.AliasMap() {
+		if alias == name {
+			temp := args
+			name = command[0]
+			args = nil
+			args = append(command[1:], temp...)
+		}
+	}
+	builtins.AddHistory(input)
+
 	// Check for built-in commands.
 	// New builtin commands should be added here. Eventually this should be refactored to its own func.
 	switch name {
@@ -78,6 +88,16 @@ func handleInput(w io.Writer, input string, exit chan<- struct{}) error {
 		return builtins.ChangeDirectory(args...)
 	case "env":
 		return builtins.EnvironmentVariables(w, args...)
+	case "pwd":
+		return builtins.PrintWorkingDirectory()
+	case "echo":
+		return builtins.Echo(args...)
+	case "alias":
+		return builtins.Alias(args...)
+	case "unalias":
+		return builtins.UnAlias(args...)
+	case "history":
+		return builtins.History(args...)
 	case "exit":
 		exit <- struct{}{}
 		return nil

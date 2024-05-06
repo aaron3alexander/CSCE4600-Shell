@@ -1,0 +1,38 @@
+package builtins
+
+import (
+	"fmt"
+)
+
+var commandHistory []string
+
+func AddHistory(command string) {
+	commandHistory = append(commandHistory, command)
+}
+
+func History(args ...string) error {
+
+	if len(args) > 1 {
+		return fmt.Errorf("too many arguments")
+	} else if len(args) == 1 {
+		if args[0] == "-c" {
+			ClearHistory()
+			return nil
+		}
+	}
+
+	if len(commandHistory) == 1 {
+		fmt.Println("history is empty")
+		return nil
+	}
+
+	for i, command := range commandHistory[:len(commandHistory)-1] {
+		fmt.Printf("%d: %s\n", i+1, command)
+	}
+	return nil
+}
+
+// ClearHistory clears the command history.
+func ClearHistory() {
+	commandHistory = nil
+}
