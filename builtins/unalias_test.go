@@ -9,9 +9,12 @@ import (
 )
 
 func TestUnAlias(t *testing.T) {
-	builtins.Alias("alias1", "pwd")
-	builtins.Alias("alias2", "echo hello")
-
+	if err := builtins.Alias("alias1", "pwd"); err != nil {
+		t.Fatalf("Error setting up test: %v", err)
+	}
+	if err := builtins.Alias("alias2", "echo hello"); err != nil {
+		t.Fatalf("Error setting up test: %v", err)
+	}
 	tests := []struct {
 		name    string
 		args    []string
